@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#fails if module doesn't exist but it's ok
+which module && module load singularity
+
+#(available dipy clis)
+#dipy_mask                 dipy_reconst_csa          dipy_reconst_dti_restore
+#dipy_median_otsu          dipy_reconst_csd
+#dipy_nlmeans              dipy_reconst_dti
+
+cmd=`jq -r .command config.json`
+case "$cmd" in
+
+    dipy_median_otsu)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --save_masked \
+                --numpass $(jq -r .numpass config.json) \
+                --median_radius $(jq -r .median_radius config.json) \
+                --out_mask mask.nii.gz \
+                --out_masked dwi.nii.gz \
+                $(jq -r .dwi config.json)"
+        ;;
+
+    dipy_reconst_dti)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --out_strat what \
+                $(jq -r .dwi config.json) $(jq -r .bvecs config.json) $(jq -r .bvals config.json)"
+        ;;
+esac
+
+echo "running $cmd $arg"
+singularity exec -e docker://brainlife/dipy $cmd $arg
