@@ -26,7 +26,7 @@ case "$cmd" in
         arg="   --force \
                 --out_dir $(pwd) \
                 --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvecs config.json) $(jq -r .bvals config.json)"
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
 esac
 

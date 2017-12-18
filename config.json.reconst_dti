@@ -2,5 +2,6 @@
     "command": "dipy_reconst_dti",
     "dwi": "testdata/brad1/data.nii.gz",
     "bvecs": "testdata/brad1/data.bvecs",
-    "bvals": "testdata/brad1/data.bvals"
+    "bvals": "testdata/brad1/data.bvals",
+    "mask": "mask.nii.gz"
 }
