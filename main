@@ -21,6 +21,11 @@ case "$cmd" in
                 --out_masked dwi.nii.gz \
                 $(jq -r .dwi config.json)"
 
+        autocrop=$(jq -r .autocrop config.json)
+        if [ $autocrop -eq "true" ]; then
+            arg=" --autocrop $arg""
+        fi
+
         #bypass bvals / bvecs for masked output
         cp $(jq -r .bvals config.json) dwi.bvals
         cp $(jq -r .bvecs config.json) dwi.bvecs
