@@ -22,7 +22,7 @@ case "$cmd" in
                 $(jq -r .dwi config.json)"
 
         autocrop=$(jq -r .autocrop config.json)
-        if [ $autocrop -eq "true" ]; then
+        if [ $autocrop == "true" ]; then
             arg=" --autocrop $arg"
         fi
 
@@ -43,4 +43,4 @@ case "$cmd" in
 esac
 
 echo "running $cmd $arg"
-singularity exec -e docker://brainlife/dipy $cmd $arg
+singularity exec -e docker://brainlife/dipy:0.13.0 $cmd $arg
