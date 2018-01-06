@@ -20,6 +20,10 @@ case "$cmd" in
                 --out_mask mask.nii.gz \
                 --out_masked dwi.nii.gz \
                 $(jq -r .dwi config.json)"
+
+        #bypass bvals / bvecs for masked output
+        cp $(jq -r .bvals config.json) dwi.bvals
+        cp $(jq -r .bvecs config.json) dwi.bvecs
         ;;
 
     dipy_reconst_dti)
@@ -28,6 +32,9 @@ case "$cmd" in
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
+    *)
+        echo "invalid command: $cmd"
+        exit 1
 esac
 
 echo "running $cmd $arg"

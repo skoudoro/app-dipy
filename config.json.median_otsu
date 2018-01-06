@@ -2,5 +2,7 @@
     "command": "dipy_median_otsu",
     "numpass": 5,
     "median_radius": 2,
-    "dwi": "testdata/brad1/data.nii.gz"
+    "dwi": "testdata/brad1/data.nii.gz",
+    "bvecs": "testdata/brad1/data.bvecs",
+    "bvals": "testdata/brad1/data.bvals"
 }
