@@ -23,7 +23,7 @@ case "$cmd" in
 
         autocrop=$(jq -r .autocrop config.json)
         if [ $autocrop -eq "true" ]; then
-            arg=" --autocrop $arg""
+            arg=" --autocrop $arg"
         fi
 
         #bypass bvals / bvecs for masked output
