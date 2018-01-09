@@ -24,13 +24,21 @@ case "$cmd" in
         # Todo: Add these options after dipy release 0.14.0
         # --vol_idx $(jq -r .vol_idx config.json) \
         # --dilate $(jq -r .dilate config.json)
+        autocrop=$(jq -r .autocrop config.json)
+        if [ $autocrop == "true" ]; then
+            arg=" --autocrop $arg"
+        fi
+
+        #bypass bvals / bvecs for masked output
+        cp $(jq -r .bvals config.json) dwi.bvals
+        cp $(jq -r .bvecs config.json) dwi.bvecs
         ;;
 
     dipy_reconst_dti)
         arg="   --force \
                 --out_dir $(pwd) \
                 --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvecs config.json) $(jq -r .bvals config.json)"
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
 
     dipy_nlmeans)
@@ -41,7 +49,10 @@ case "$cmd" in
                 $(jq -r .dwi config.json)"
         ;;
 
+    *)
+        echo "invalid command: $cmd"
+        exit 1
 esac
 
 echo "running $cmd $arg"
-singularity exec -e docker://brainlife/dipy $cmd $arg
+singularity exec -e docker://brainlife/dipy:0.13.0 $cmd $arg
