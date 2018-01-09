@@ -1,0 +1,5 @@
+{
+    "command": "dipy_nlmeans",
+    "dwi": "testdata/brad1/data.nii.gz",
+    "sigma": 0
+}

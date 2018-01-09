@@ -21,6 +21,9 @@ case "$cmd" in
                 --out_masked dwi.nii.gz \
                 $(jq -r .dwi config.json)"
 
+        # Todo: Add these options after dipy release 0.14.0
+        # --vol_idx $(jq -r .vol_idx config.json) \
+        # --dilate $(jq -r .dilate config.json)
         autocrop=$(jq -r .autocrop config.json)
         if [ $autocrop == "true" ]; then
             arg=" --autocrop $arg"
@@ -37,6 +40,15 @@ case "$cmd" in
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
+
+    dipy_nlmeans)
+        arg="   --force \
+                --out_dir $PWD \
+                --sigma $(jq -r .sigma config.json) \
+                --out_denoised dwi.nii.gz \
+                $(jq -r .dwi config.json)"
+        ;;
+
     *)
         echo "invalid command: $cmd"
         exit 1
