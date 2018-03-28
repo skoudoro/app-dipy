@@ -3,10 +3,13 @@
 #fails if module doesn't exist but it's ok
 which module && module load singularity
 
-#(available dipy clis)
-#dipy_mask                 dipy_reconst_csa          dipy_reconst_dti_restore
-#dipy_median_otsu          dipy_reconst_csd
-#dipy_nlmeans              dipy_reconst_dti
+#(available dipy clis 0.14)
+# dipy_fit_mapmri	    dipy_fit_csa
+# dipy_mask			    dipy_fit_csd
+# dipy_median_otsu		dipy_fit_dti
+# dipy_info             dipy_fit_dki
+# dipy_nlmeans			dipy_reslice
+# dipy_track_det
 
 cmd=`jq -r .command config.json`
 case "$cmd" in
@@ -34,11 +37,19 @@ case "$cmd" in
         cp $(jq -r .bvecs config.json) dwi.bvecs
         ;;
 
-    dipy_reconst_dti)
+    dipy_fit_dti)
         arg="   --force \
                 --out_dir $(pwd) \
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        ;;
+    
+    dipy_fit_mapmri)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --out_strat what \
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)"
+                $(jq -r .big_delta config.json)
         ;;
 
     dipy_nlmeans)
