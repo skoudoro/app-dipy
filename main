@@ -44,12 +44,33 @@ case "$cmd" in
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
     
+    dipy_fit_dki)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --out_strat what \
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        ;;
+    
+    dipy_fit_csa)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --out_strat what \
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        ;;
+    
+    dipy_fit_csd)
+        arg="   --force \
+                --out_dir $(pwd) \
+                --out_strat what \
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        ;;
+    
     dipy_fit_mapmri)
         arg="   --force \
                 --out_dir $(pwd) \
                 --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)"
-                $(jq -r .big_delta config.json)
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)
+                $(jq -r .big_delta config.json)"
         ;;
 
     dipy_nlmeans)
@@ -59,6 +80,33 @@ case "$cmd" in
                 --out_denoised dwi.nii.gz \
                 $(jq -r .dwi config.json)"
         ;;
+        
+    dipy_mask)
+        arg=" --force \
+              --out_dir $PWD \
+              --lb $(jq -r .lb config.json) \
+              --out_mask mask.nii.gz \
+              $(jq -r .mask config.json)"
+        ;;
+    
+    dipy_reslice)
+        arg="   --force \
+                --out_dir $PWD \
+                --out_resliced resliced.nii.gz \
+                $(jq -r .dwi config.json) $(jq -r .new_vox_size config.json)"
+        ;;
+    
+    dipy_info)
+        arg="   --force \
+                --out_dir $PWD \
+                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)"
+        ;;
+    
+    dipy_track_det)
+        arg="   --force \
+                --out_dir $PWD \ 
+                $(jq -r .pam config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
+        
 
     *)
         echo "invalid command: $cmd"
