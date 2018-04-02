@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#fails if module doesn't exist but it's ok
-which module && module load singularity
-
 #(available dipy clis 0.14)
 # dipy_fit_mapmri	    dipy_fit_csa
 # dipy_mask			    dipy_fit_csd
@@ -10,6 +7,10 @@ which module && module load singularity
 # dipy_info             dipy_fit_dki
 # dipy_nlmeans			dipy_reslice
 # dipy_track_det
+
+# TODO 
+# We are constructing command line argument using config.json content. 
+# We should validate each paths (cleanse it through realpath?) 
 
 cmd=`jq -r .command config.json`
 case "$cmd" in
@@ -114,4 +115,4 @@ case "$cmd" in
 esac
 
 echo "running $cmd $arg"
-singularity exec -e docker://brainlife/dipy:0.13.0 $cmd $arg
+singularity exec -e docker://brainlife/dipy:0.14.0 $cmd $arg
