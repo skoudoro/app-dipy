@@ -1,7 +1,2 @@
 #!/bin/bash
-docker build -t brainlife/dipy .
-
-#if [ $? -eq 0 ];
-#then
-#    docker push brainlife/dipy
-#fi
+docker build -t brainlife/dipy . && docker tag brainlife/dipy brainlife/dipy:0.14.0 && docker push brainlife/dipy

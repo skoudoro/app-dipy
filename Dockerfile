@@ -7,8 +7,9 @@ RUN pip install numpy cython scipy matplotlib h5py nibabel
 RUN pip install cvxpy scikit-learn
 RUN pip install dipy==0.13.0
 
-#to make it work on singularity
-#ENV PYTHONPATH /usr/local/lib/python2.7/dist-packages
-RUN ldconfig
+#make it work under singularity
+RUN ldconfig && mkdir -p /N/u /N/home /N/dc2 /N/soft
 
+#https://wiki.ubuntu.com/DashAsBinSh
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
