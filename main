@@ -115,4 +115,4 @@ case "$cmd" in
 esac
 
 echo "running $cmd $arg"
-singularity exec -e docker://brainlife/dipy:0.14.0 $cmd $arg
+singularity exec -e docker://brainlife/dipy:0.14 $cmd $arg
