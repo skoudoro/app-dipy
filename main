@@ -108,7 +108,7 @@ case "$cmd" in
                 --out_dir $PWD \ 
                 $(jq -r .pam config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
         
-
+        ;;
     *)
         echo "invalid command: $cmd"
         exit 1
