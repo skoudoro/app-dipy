@@ -93,8 +93,12 @@ case "$cmd" in
     dipy_reslice)
         arg="   --force \
                 --out_dir $PWD \
-                --out_resliced resliced.nii.gz \
+                --out_resliced dwi.nii.gz \
                 $(jq -r .dwi config.json) $(jq -r .new_vox_size config.json)"
+           
+                #pass through bvecs/bvals
+                cp $(jq -r .bvecs config.json) dwi.bvecs
+                cp $(jq -r .bvals config.json) dwi.bvals
         ;;
     
     dipy_info)
