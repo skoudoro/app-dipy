@@ -85,9 +85,8 @@ case "$cmd" in
     dipy_mask)
         arg=" --force \
               --out_dir $PWD \
-              --lb $(jq -r .lb config.json) \
               --out_mask mask.nii.gz \
-              $(jq -r .mask config.json)"
+              $(jq -r .dwi config.json) $(jq -r .lb config.json)"
         ;;
     
     dipy_reslice)
@@ -103,7 +102,6 @@ case "$cmd" in
     
     dipy_info)
         arg="   --force \
-                --out_dir $PWD \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)"
         ;;
     
