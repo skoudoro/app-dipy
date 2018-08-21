@@ -41,6 +41,7 @@ case "$cmd" in
     dipy_fit_dki)
         arg="   --force \
                 --out_dir $(pwd) \
+                --b0_threshold $(jq -r .b0_threshold config.json) \
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
@@ -48,6 +49,7 @@ case "$cmd" in
     dipy_fit_csa)
         arg="   --force \
                 --out_dir $(pwd) \
+                --b0_threshold $(jq -r .b0_threshold config.json) \
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
@@ -55,6 +57,7 @@ case "$cmd" in
     dipy_fit_csd)
         arg="   --force \
                 --out_dir $(pwd) \
+                --b0_threshold $(jq -r .b0_threshold config.json) \
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
         ;;
@@ -62,6 +65,7 @@ case "$cmd" in
     dipy_fit_mapmri)
         arg="   --force \
                 --out_dir $(pwd) \
+                --b0_threshold $(jq -r .b0_threshold config.json) \
                 --out_strat what \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)
                 $(jq -r .big_delta config.json)"
