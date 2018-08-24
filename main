@@ -79,11 +79,18 @@ case "$cmd" in
                 $(jq -r .dwi config.json)"
         ;;
         
-    dipy_mask)
+    dipy_mask:dwi)
         arg=" --force \
               --out_dir $PWD \
               --out_mask mask.nii.gz \
               $(jq -r .dwi config.json) $(jq -r .lb config.json)"
+        ;;
+
+    dipy_mask:tensor)
+        arg=" --force \
+              --out_dir $PWD \
+              --out_mask mask.nii.gz \
+              $(jq -r .fa config.json) $(jq -r .lb config.json)"
         ;;
     
     dipy_reslice)
@@ -105,7 +112,7 @@ case "$cmd" in
     dipy_track_det)
         arg="   --force \
                 --out_dir $PWD \ 
-                $(jq -r .pam config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
+                $(jq -r .peaks config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
         
         ;;
     *)
