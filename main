@@ -80,6 +80,7 @@ case "$cmd" in
         ;;
         
     dipy_mask:dwi)
+        cmd="dipy_mask"
         arg=" --force \
               --out_dir $PWD \
               --out_mask mask.nii.gz \
@@ -87,6 +88,7 @@ case "$cmd" in
         ;;
 
     dipy_mask:tensor)
+        cmd="dipy_mask"
         arg=" --force \
               --out_dir $PWD \
               --out_mask mask.nii.gz \
