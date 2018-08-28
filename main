@@ -113,7 +113,7 @@ case "$cmd" in
     
     dipy_track_det)
         arg="   --force \
-                --out_dir $PWD \ 
+                --out_dir $PWD \
                 $(jq -r .peaks config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
         
         ;;
