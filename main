@@ -105,7 +105,15 @@ case "$cmd" in
                 cp $(jq -r .bvecs config.json) dwi.bvecs
                 cp $(jq -r .bvals config.json) dwi.bvals
         ;;
-    
+    dipy_recobundles)
+        # dipy_slr ~/.dipy/bundle_atlas_hcp842/Atlas_in_MNI_Space_16_bundles/whole_brain/whole_brain_MNI.trk csa_track.trk --mix_names
+        cmd = 'dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
+               "$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")" '
+        # dipy_labelsbundles $(jq -r .tracks_target config.json) "*.npy" --mix_names --out_dir original_space
+
+        arg=""
+
+        ;;
     dipy_info)
         arg="   --force \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)"
