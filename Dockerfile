@@ -4,7 +4,7 @@ MAINTAINER Soichi Hayashi <hayashis@iu.edu>
 RUN apt-get update && apt-get install -y python-pip git
 RUN pip install numpy cython scipy matplotlib h5py nibabel nipype
 RUN pip install cvxpy scikit-learn
-CMD git clone https://github.com/nipy/dipy.git && cd dipy && pip install --user -e .
+CMD git clone https://github.com/nipy/dipy.git && cd dipy && pip install .
 
 #make it work under singularity
 RUN ldconfig && mkdir -p /N/u /N/home /N/dc2 /N/soft
