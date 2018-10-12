@@ -131,4 +131,4 @@ case "$cmd" in
 esac
 
 echo "running $cmd $arg"
-SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://skab12/dipy $cmd $arg
+SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://skab12/app-dipy $cmd $arg
