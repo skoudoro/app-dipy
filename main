@@ -101,11 +101,32 @@ case "$cmd" in
                 --out_resliced dwi.nii.gz \
                 $(jq -r .dwi config.json) $(jq -r .new_vox_size config.json)"
            
-                #pass through bvecs/bvals
-                cp $(jq -r .bvecs config.json) dwi.bvecs
-                cp $(jq -r .bvals config.json) dwi.bvals
+        # pass through bvecs/bvals
+        cp $(jq -r .bvecs config.json) dwi.bvecs
+        cp $(jq -r .bvals config.json) dwi.bvals
+
         ;;
-    
+    dipy_recobundles)
+        set -f
+        if [ ! -d "atlas" ]; then
+            mkdir "atlas"
+        fi
+        if [ ! -f "atlas/Atlas_in_MNI_Space_16_bundles.zip" ]; then
+            wget -O "atlas/Atlas_in_MNI_Space_16_bundles.zip" https://ndownloader.figshare.com/files/11921522
+            unzip -d "atlas" "atlas/Atlas_in_MNI_Space_16_bundles.zip"
+        fi
+
+        arg="   --force \
+                --out_dir $PWD \
+                --mix_names --refine \
+                $(jq -r .tracks_target config.json) atlas/Atlas_in_MNI_Space_16_bundles/bundles/*.trk"
+
+        dipy_slr ~/.dipy/bundle_atlas_hcp842/Atlas_in_MNI_Space_16_bundles/whole_brain/whole_brain_MNI.trk csa_track.trk --mix_names
+        dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
+            "$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")"
+        dipy_labelsbundles $(jq -r .tracks_target config.json) "*.npy" --mix_names --out_dir original_space
+
+        ;;
     dipy_info)
         arg="   --force \
                 $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)"
@@ -123,4 +144,5 @@ case "$cmd" in
 esac
 
 echo "running $cmd $arg"
-SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://brainlife/dipy:0.14 $cmd $arg
+SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://skab12/app-dipy $cmd $arg
+set +f
