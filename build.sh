@@ -1,2 +1,8 @@
 #!/bin/bash
-docker build -t brainlife/dipy . && docker tag brainlife/dipy brainlife/dipy:0.14 && docker push brainlife/dipy
+
+set -x
+set -e
+
+docker build -t brainlife/dipy .
+docker tag brainlife/dipy brainlife/dipy:0.14.2
+docker push brainlife/dipy
