@@ -18,79 +18,90 @@ case "$cmd" in
             ext_arg="--autocrop"
         fi
 
-        script="$cmd $ext_arg --force \
-                --out_dir $(pwd) \
-                --save_masked \
-                --numpass $(jq -r .numpass config.json) \
-                --median_radius $(jq -r .median_radius config.json) \
-                --out_mask mask.nii.gz \
-                --out_masked dwi.nii.gz \
-                $(jq -r .dwi config.json)"
-
+        cat > script.sh <<EOF
+$cmd $ext_arg --force  \
+    --out_dir $(pwd) \
+    --save_masked \
+    --numpass $(jq -r .numpass config.json) \
+    --median_radius $(jq -r .median_radius config.json) \
+    --out_mask mask.nii.gz \
+    --out_masked dwi.nii.gz \
+    $(jq -r .dwi config.json)
+EOF
         ;;
 
     dipy_fit_dti)
-        script="$cmd --force \
-                --out_dir $(pwd) \
-                --b0_threshold $(jq -r .b0_threshold config.json) \
-                --bvecs_tol $(jq -r .bvecs_tol config.json) \
-                --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $(pwd) \
+    --b0_threshold $(jq -r .b0_threshold config.json) \
+    --bvecs_tol $(jq -r .bvecs_tol config.json) \
+    --out_strat what \
+    $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)
+EOF
         ;;
     
     dipy_fit_dki)
-        script="$cmd --force \
-                --out_dir $(pwd) \
-                --b0_threshold $(jq -r .b0_threshold config.json) \
-                --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $(pwd) \
+    --b0_threshold $(jq -r .b0_threshold config.json) \
+    --out_strat what \
+    $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)
+EOF
         ;;
     
     dipy_fit_csa)
-        script="$cmd --force \
-                --out_dir $(pwd) \
-                --b0_threshold $(jq -r .b0_threshold config.json) \
-                --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $(pwd) \
+    --b0_threshold $(jq -r .b0_threshold config.json) \
+    --out_strat what \
+    $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)
         ;;
     
     dipy_fit_csd)
-        script="$cmd --force \
-                --out_dir $(pwd) \
-                --b0_threshold $(jq -r .b0_threshold config.json) \
-                --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $(pwd) \
+    --b0_threshold $(jq -r .b0_threshold config.json) \
+    --out_strat what \
+    $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .mask config.json)
         ;;
     
     dipy_fit_mapmri)
-        script="$cmd --force \
-                --out_dir $(pwd) \
-                --b0_threshold $(jq -r .b0_threshold config.json) \
-                --out_strat what \
-                $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)
-                $(jq -r .big_delta config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $(pwd) \
+    --b0_threshold $(jq -r .b0_threshold config.json) \
+    --out_strat what \
+    $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json) $(jq -r .small_delta config.json)
+    $(jq -r .big_delta config.json)
         ;;
 
     dipy_nlmeans)
-        script="$cmd --force \
-                --out_dir $PWD \
-                --sigma $(jq -r .sigma config.json) \
-                --out_denoised dwi.nii.gz \
-                $(jq -r .dwi config.json)"
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $PWD \
+    --sigma $(jq -r .sigma config.json) \
+    --out_denoised dwi.nii.gz \
+    $(jq -r .dwi config.json)
         ;;
         
     dipy_mask:dwi)
-        script="dipy_mask --force \
-              --out_dir $PWD \
-              --out_mask mask.nii.gz \
-              $(jq -r .dwi config.json) $(jq -r .lb config.json)"
-        ;;
+        cat > script.sh <<EOF
+dipy_mask --force \
+    --out_dir $PWD \
+    --out_mask mask.nii.gz \
+    $(jq -r .dwi config.json) $(jq -r .lb config.json)
+      ;;
 
     dipy_mask:tensor)
-        script="dipy_mask --force \
-              --out_dir $PWD \
-              --out_mask mask.nii.gz \
-              $(jq -r .fa config.json) $(jq -r .lb config.json)"
+        cat > script.sh <<EOF
+dipy_mask --force \
+    --out_dir $PWD \
+    --out_mask mask.nii.gz \
+    $(jq -r .fa config.json) $(jq -r .lb config.json)
         ;;
     
     dipy_reslice)
@@ -98,42 +109,41 @@ case "$cmd" in
         cp $(jq -r .bvecs config.json) dwi.bvecs
         cp $(jq -r .bvals config.json) dwi.bvals
 
-        script="$cmd --force \
-                --out_dir $PWD \
-                --out_resliced dwi.nii.gz \
-                $(jq -r .dwi config.json) $(jq -r .new_vox_size config.json)"
-
+        cat > script.sh <<EOF
+$cmd --force \
+    --out_dir $PWD \
+    --out_resliced dwi.nii.gz \
+    $(jq -r .dwi config.json) $(jq -r .new_vox_size config.json)
+EOF
         ;;
 
     dipy_recobundles)
-        if [ ! -d "atlas" ]; then
-            mkdir "atlas"
-        fi
-
         #TODO - maybe we could do this in the Dockerfile? Ping Josh as he is doing something similar I believe
+        mkdir -p "atlas"
         if [ ! -f "atlas/Atlas_in_MNI_Space_16_bundles.zip" ]; then
             wget -O "atlas/Atlas_in_MNI_Space_16_bundles.zip" https://ndownloader.figshare.com/files/11921522
             unzip -d "atlas" "atlas/Atlas_in_MNI_Space_16_bundles.zip"
         fi
 
-        #preprocessing
-        script="\
-        dipy_slr ~/.dipy/bundle_atlas_hcp842/Atlas_in_MNI_Space_16_bundles/whole_brain/whole_brain_MNI.trk csa_track.trk --mix_names \
-        dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
-            \"$(python -c 'from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])')\" \
-        dipy_labelsbundles $(jq -r .tracks_target config.json) \"*.npy\" --mix_names --out_dir original_space \
-        dipy_recobundles --force \
-                --out_dir $PWD \
-                --mix_names --refine \
-                $(jq -r .tracks_target config.json) $(ls atlas/Atlas_in_MNI_Space_16_bundles/bundles/*.trk)"
+        cat > script.sh <<EOF
+dipy_slr ~/.dipy/bundle_atlas_hcp842/Atlas_in_MNI_Space_16_bundles/whole_brain/whole_brain_MNI.trk csa_track.trk --mix_names
+dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
+    "$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")" #double-double quotes ok?
+dipy_labelsbundles $(jq -r .tracks_target config.json) "*.npy" --mix_names --out_dir original_space
+dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) atlas/Atlas_in_MNI_Space_16_bundles/bundles/*.trk
+EOF
 
         ;;
     dipy_info)
-        script="$cmd --force $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)"
+        cat > script.sh << EOF
+$cmd --force $(jq -r .dwi config.json) $(jq -r .bvals config.json) $(jq -r .bvecs config.json)
+EOF
         ;;
     
     dipy_track_det)
-        script="$cmd --force --out_dir $PWD $(jq -r .peaks config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)"
+        cat > script.sh << EOF
+$cmd --force --out_dir $PWD $(jq -r .peaks config.json) $(jq -r .stop config.json) $(jq -r .seed config.json)
+EOF
         ;;
     *)
         echo "invalid command: $cmd"
@@ -141,7 +151,6 @@ case "$cmd" in
 esac
 
 echo "running $script"
-echo $script > script.sh
 chmod +x script.sh
 SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://brainlife/dipy:0.16.0 $script
 

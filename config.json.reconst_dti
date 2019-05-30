@@ -1,7 +1,8 @@
 {
-    "command": "dipy_reconst_dti",
+    "command": "dipy_recobundles",
     "dwi": "testdata/brad1/data.nii.gz",
     "bvecs": "testdata/brad1/data.bvecs",
     "bvals": "testdata/brad1/data.bvals",
-    "mask": "mask.nii.gz"
+    "mask": "mask.nii.gz",
+    "tracks_target": "something"
 }
