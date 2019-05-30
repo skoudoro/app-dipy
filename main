@@ -126,9 +126,11 @@ EOF
         fi
 
         cat > script.sh <<EOF
+set -e
+set -x
 dipy_slr ~/.dipy/bundle_atlas_hcp842/Atlas_in_MNI_Space_16_bundles/whole_brain/whole_brain_MNI.trk csa_track.trk --mix_names
 dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
-    "$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")" #double-double quotes ok?
+    "\$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")" #double-double quotes ok?
 dipy_labelsbundles $(jq -r .tracks_target config.json) "*.npy" --mix_names --out_dir original_space
 dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) atlas/Atlas_in_MNI_Space_16_bundles/bundles/*.trk
 EOF
