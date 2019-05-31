@@ -3,6 +3,9 @@
 #PBS -l vmem=16gb
 #PBS -l walltime=10:00:00
 
+set -e
+set -x
+
 cmd=`jq -r .command config.json`
 case "$cmd" in
 
@@ -144,7 +147,7 @@ set -x
 #dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) \
 #    "\$(python -c "from dipy.data import get_bundle_atlas_hcp842; print(get_bundle_atlas_hcp842()[1])")" #double-double quotes ok?
 
-dipy_labelsbundles $(jq -r .tracks_target config.json) *.npy --mix_names --out_dir original_space
+#dipy_labelsbundles $(jq -r .tracks_target config.json) *.npy --mix_names --out_dir original_space
 dipy_recobundles --force --out_dir $PWD --mix_names --refine $(jq -r .tracks_target config.json) atlas/Atlas_in_MNI_Space_16_bundles/bundles/*.trk
 EOF
 
@@ -167,7 +170,6 @@ EOF
         exit 1
 esac
 
-echo "running $script"
 chmod +x script.sh
 SINGULARITYENV_PYTHONNOUSERSITE=true singularity exec -e docker://brainlife/dipy:0.16.0 ./script.sh
 
